@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Empresa {
+  id         Int        @id @default(autoincrement())
+  nombre     String
+  subdominio String     @unique
+  plan       String     @default("basico")
+  activo     Boolean    @default(true)
+  usuarios   Usuario[]
+  empleados  Empleado[]
+}
+
+model Usuario {
+  id            Int     @id @default(autoincrement())
+  empresaId     Int
+  nombre        String
+  email         String  @unique
+  passwordHash  String
+  rol           String  // "admin" | "seguridad" | "rh"
+  empresa       Empresa @relation(fields: [empresaId], references: [id])
+}
+
+model Empleado {
+  id                  Int        @id @default(autoincrement())
+  empresaId           Int
+  nombre              String
+  numeroTarjeta       String     @unique
+  turno               String     // "manana" | "tarde" | "noche"
+  departamento        String
+  tipo                String     // "empleado" | "brigadista" | "proveedor"
+  especialidadBrigada String?    // "primeros_auxilios" | "evacuacion" | "comunicacion" | "busqueda"
+  estadoActual        String     @default("fuera") // "dentro" | "fuera"
+  activo              Boolean    @default(true)
+  empresa             Empresa    @relation(fields: [empresaId], references: [id])
+  registros           Registro[]
+}
+
+model Registro {
+  id         Int      @id @default(autoincrement())
+  empleadoId Int
+  tipo       String   // "entrada" | "salida" | "salida_automatica"
+  puerta     String   // "peatonal" | "vehicular"
+  fechaHora  DateTime @default(now())
+  empleado   Empleado @relation(fields: [empleadoId], references: [id])
+}
