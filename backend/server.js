@@ -19,6 +19,9 @@ const http = require('http');
 
 const app = express();
 
+// Trust proxy — required for Railway/Vercel (behind reverse proxy)
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
