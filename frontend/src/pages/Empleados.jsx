@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-function getAuthHeaders() {
-  const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`
-  };
-}
+import { apiUrl, getAuthHeaders } from '../services/api.js';
 
 const TURNOS = ['manana', 'tarde', 'noche'];
 const TIPOS = ['empleado', 'brigadista', 'proveedor'];
@@ -41,7 +34,7 @@ export default function Empleados() {
 
   async function fetchEmpleados() {
     try {
-      const res = await fetch('/api/empleados', { headers: getAuthHeaders() });
+      const res = await fetch(apiUrl('/api/empleados'), { headers: getAuthHeaders() });
       if (res.status === 401) { navigate('/login'); return; }
       const data = await res.json();
       setEmpleados(data);
@@ -83,7 +76,7 @@ export default function Empleados() {
     if (body.tipo !== 'brigadista') body.especialidadBrigada = null;
 
     try {
-      const url = editingId ? `/api/empleados/${editingId}` : '/api/empleados';
+      const url = editingId ? apiUrl(`/api/empleados/${editingId}`) : apiUrl('/api/empleados');
       const method = editingId ? 'PUT' : 'POST';
       const res = await fetch(url, {
         method,
@@ -108,7 +101,7 @@ export default function Empleados() {
     if (!confirm(`¿Estás seguro de desactivar a ${emp.nombre}?`)) return;
 
     try {
-      const res = await fetch(`/api/empleados/${emp.id}`, {
+      const res = await fetch(apiUrl(`/api/empleados/${emp.id}`), {
         method: 'DELETE',
         headers: getAuthHeaders()
       });

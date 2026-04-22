@@ -1,4 +1,15 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '..', '.env') });
+// Load .env from parent dir in development, or from current dir, or rely on platform env vars
+const path = require('path');
+const parentEnv = path.resolve(__dirname, '..', '.env');
+const localEnv = path.resolve(__dirname, '.env');
+const fs = require('fs');
+if (fs.existsSync(parentEnv)) {
+  require('dotenv').config({ path: parentEnv });
+} else if (fs.existsSync(localEnv)) {
+  require('dotenv').config({ path: localEnv });
+} else {
+  require('dotenv').config();
+}
 
 const express = require('express');
 const cors = require('cors');

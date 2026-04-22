@@ -4,14 +4,7 @@ import Contador from '../components/Contador.jsx';
 import MovimientosRecientes from '../components/MovimientosRecientes.jsx';
 import ListaEnPlanta from '../components/ListaEnPlanta.jsx';
 import { onConteoActualizado } from '../services/socket.js';
-
-function getAuthHeaders() {
-  const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`
-  };
-}
+import { apiUrl, getAuthHeaders } from '../services/api.js';
 
 export default function Dashboard() {
   const [conteo, setConteo] = useState({ totalEnPlanta: 0, brigadistas: 0, proveedores: 0 });
@@ -24,9 +17,9 @@ export default function Dashboard() {
     async function fetchData() {
       try {
         const [conteoRes, enPlantaRes, movimientosRes] = await Promise.all([
-          fetch('/api/dashboard/conteo', { headers: getAuthHeaders() }),
-          fetch('/api/dashboard/en-planta', { headers: getAuthHeaders() }),
-          fetch('/api/dashboard/movimientos', { headers: getAuthHeaders() })
+          fetch(apiUrl('/api/dashboard/conteo'), { headers: getAuthHeaders() }),
+          fetch(apiUrl('/api/dashboard/en-planta'), { headers: getAuthHeaders() }),
+          fetch(apiUrl('/api/dashboard/movimientos'), { headers: getAuthHeaders() })
         ]);
 
         if (conteoRes.status === 401 || enPlantaRes.status === 401) {
@@ -77,7 +70,7 @@ export default function Dashboard() {
       }
 
       // Refresh en-planta list
-      fetch('/api/dashboard/en-planta', { headers: getAuthHeaders() })
+      fetch(apiUrl('/api/dashboard/en-planta'), { headers: getAuthHeaders() })
         .then((res) => res.json())
         .then((data) => setEnPlanta(data))
         .catch(console.error);

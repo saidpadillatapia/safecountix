@@ -2,20 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BrigadistasList from '../components/BrigadistasList.jsx';
 import { onConteoActualizado, onEvacuacionActivada } from '../services/socket.js';
+import { apiUrl, getAuthHeaders } from '../services/api.js';
 
 const tipoColors = {
   empleado: 'bg-primario/20 text-primario border-primario/30',
   brigadista: 'bg-yellow-900/20 text-yellow-400 border-yellow-700/30',
   proveedor: 'bg-blue-900/20 text-blue-400 border-blue-700/30'
 };
-
-function getAuthHeaders() {
-  const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`
-  };
-}
 
 export default function Evacuacion() {
   const [enPlanta, setEnPlanta] = useState([]);
@@ -34,8 +27,8 @@ export default function Evacuacion() {
     async function fetchData() {
       try {
         const [enPlantaRes, brigadistasRes] = await Promise.all([
-          fetch('/api/evacuacion/en-planta', { headers: getAuthHeaders() }),
-          fetch('/api/evacuacion/brigadistas', { headers: getAuthHeaders() })
+          fetch(apiUrl('/api/evacuacion/en-planta'), { headers: getAuthHeaders() }),
+          fetch(apiUrl('/api/evacuacion/brigadistas'), { headers: getAuthHeaders() })
         ]);
 
         if (enPlantaRes.status === 401) {
@@ -80,12 +73,12 @@ export default function Evacuacion() {
   useEffect(() => {
     const unsubConteo = onConteoActualizado(() => {
       // Refresh en-planta list when counts change
-      fetch('/api/evacuacion/en-planta', { headers: getAuthHeaders() })
+      fetch(apiUrl('/api/evacuacion/en-planta'), { headers: getAuthHeaders() })
         .then((res) => res.json())
         .then((data) => setEnPlanta(data))
         .catch(console.error);
 
-      fetch('/api/evacuacion/brigadistas', { headers: getAuthHeaders() })
+      fetch(apiUrl('/api/evacuacion/brigadistas'), { headers: getAuthHeaders() })
         .then((res) => res.json())
         .then((data) => setBrigadistas(data))
         .catch(console.error);
@@ -109,7 +102,7 @@ export default function Evacuacion() {
   async function handleDownloadPdf() {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/evacuacion/pdf', {
+      const res = await fetch(apiUrl('/api/evacuacion/pdf'), {
         headers: { Authorization: `Bearer ${token}` }
       });
 

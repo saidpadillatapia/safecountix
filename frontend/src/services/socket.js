@@ -4,11 +4,13 @@ let socket = null;
 
 /**
  * Get or create the Socket.io client connection.
- * Uses the Vite proxy in development, so no explicit URL needed.
+ * In dev: connects to localhost via Vite proxy.
+ * In prod: connects to the backend URL from VITE_API_URL.
  */
 export function getSocket() {
   if (!socket) {
-    socket = io({
+    const serverUrl = import.meta.env.VITE_API_URL || undefined;
+    socket = io(serverUrl, {
       reconnection: true,
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
