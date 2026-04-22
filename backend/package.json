@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "prisma generate"
+    "build": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^7.7.0",
+    "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -28,7 +28,7 @@
     "node-cron": "^4.2.1",
     "nodemailer": "^8.0.5",
     "pdfkit": "^0.18.0",
-    "prisma": "^7.7.0",
+    "prisma": "^5.22.0",
     "socket.io": "^4.8.3"
   }
 }
