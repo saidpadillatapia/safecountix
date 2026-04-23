@@ -1,14 +1,14 @@
-// Load .env from parent dir in development, or from current dir, or rely on platform env vars
-const path = require('path');
-const parentEnv = path.resolve(__dirname, '..', '.env');
-const localEnv = path.resolve(__dirname, '.env');
-const fs = require('fs');
-if (fs.existsSync(parentEnv)) {
-  require('dotenv').config({ path: parentEnv });
-} else if (fs.existsSync(localEnv)) {
-  require('dotenv').config({ path: localEnv });
-} else {
-  require('dotenv').config();
+// Load .env only in development — in production (Railway) env vars come from the platform
+if (process.env.NODE_ENV !== 'production') {
+  const path = require('path');
+  const fs = require('fs');
+  const parentEnv = path.resolve(__dirname, '..', '.env');
+  const localEnv = path.resolve(__dirname, '.env');
+  if (fs.existsSync(parentEnv)) {
+    require('dotenv').config({ path: parentEnv });
+  } else if (fs.existsSync(localEnv)) {
+    require('dotenv').config({ path: localEnv });
+  }
 }
 
 const express = require('express');
@@ -114,6 +114,9 @@ const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
   console.log(`SafeCountix backend running on port ${PORT}`);
+  console.log(`DATABASE_URL: ${process.env.DATABASE_URL ? 'SET (' + process.env.DATABASE_URL.substring(0, 20) + '...)' : 'NOT SET'}`);
+  console.log(`JWT_SECRET: ${process.env.JWT_SECRET ? 'SET' : 'NOT SET'}`);
+  console.log(`CLIENT_URL: ${process.env.CLIENT_URL || 'NOT SET'}`);
 });
 
 module.exports = { app, server };
