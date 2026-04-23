@@ -113,4 +113,69 @@ async function generarPdf(req, res) {
   }
 }
 
-module.exports = { getEnPlanta, getBrigadistas, generarPdf };
+/**
+ * POST /api/evacuacion/finalizar
+ * Save evacuation record to history.
+ */
+async function finalizarEvacuacion(req, res) {
+  try {
+    const empresaId = req.user.empresaId;
+    const { fechaInicio, duracionSegundos, totalEnPlanta, totalEvacuados, brigadistas } = req.body;
+
+    if (!fechaInicio || duracionSegundos === undefined) {
+      return res.status(400).json({
+        error: true,
+        message: 'fechaInicio y duracionSegundos son requeridos',
+        code: 'VALIDATION_ERROR'
+      });
+    }
+
+    const registro = await prisma.historialEvacuacion.create({
+      data: {
+        empresaId,
+        fechaInicio: new Date(fechaInicio),
+        fechaFin: new Date(),
+        duracionSegundos: parseInt(duracionSegundos),
+        totalEnPlanta: parseInt(totalEnPlanta) || 0,
+        totalEvacuados: parseInt(totalEvacuados) || 0,
+        brigadistas: parseInt(brigadistas) || 0
+      }
+    });
+
+    return res.status(201).json(registro);
+  } catch (error) {
+    console.error('Error en finalizarEvacuacion:', error);
+    return res.status(500).json({
+      error: true,
+      message: 'Error interno del servidor',
+      code: 'INTERNAL_ERROR'
+    });
+  }
+}
+
+/**
+ * GET /api/evacuacion/historial
+ * Return evacuation history for the company.
+ */
+async function getHistorial(req, res) {
+  try {
+    const empresaId = req.user.empresaId;
+
+    const historial = await prisma.historialEvacuacion.findMany({
+      where: { empresaId },
+      orderBy: { fechaInicio: 'desc' },
+      take: 50
+    });
+
+    return res.json(historial);
+  } catch (error) {
+    console.error('Error en getHistorial:', error);
+    return res.status(500).json({
+      error: true,
+      message: 'Error interno del servidor',
+      code: 'INTERNAL_ERROR'
+    });
+  }
+}
+
+module.exports = { getEnPlanta, getBrigadistas, generarPdf, finalizarEvacuacion, getHistorial };

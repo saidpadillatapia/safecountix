@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Contador from '../components/Contador.jsx';
 import MovimientosRecientes from '../components/MovimientosRecientes.jsx';
 import ListaEnPlanta from '../components/ListaEnPlanta.jsx';
+import HistorialEvacuaciones from '../components/HistorialEvacuaciones.jsx';
 import { onConteoActualizado } from '../services/socket.js';
 import { apiUrl, getAuthHeaders } from '../services/api.js';
 
@@ -113,6 +114,8 @@ export default function Dashboard() {
           <ListaEnPlanta empleados={enPlanta} />
         </div>
       </div>
+
+      <HistorialEvacuaciones />
     </div>
   );
 }

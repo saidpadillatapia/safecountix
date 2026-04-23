@@ -18,6 +18,7 @@ model Empresa {
   activo     Boolean    @default(true)
   usuarios   Usuario[]
   empleados  Empleado[]
+  evacuaciones HistorialEvacuacion[]
 }
 
 model Usuario {
@@ -52,4 +53,16 @@ model Registro {
   puerta     String   // "peatonal" | "vehicular"
   fechaHora  DateTime @default(now())
   empleado   Empleado @relation(fields: [empleadoId], references: [id])
+}
+
+model HistorialEvacuacion {
+  id              Int      @id @default(autoincrement())
+  empresaId       Int
+  fechaInicio     DateTime
+  fechaFin        DateTime
+  duracionSegundos Int
+  totalEnPlanta   Int      // personas en planta al iniciar
+  totalEvacuados  Int      // personas marcadas como evacuadas
+  brigadistas     Int      // brigadistas en planta durante la evacuación
+  empresa         Empresa  @relation(fields: [empresaId], references: [id])
 }
