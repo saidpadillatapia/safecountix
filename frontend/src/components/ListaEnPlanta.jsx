@@ -1,31 +1,27 @@
 const tipoColors = {
-  empleado: 'bg-primario/20 text-primario',
-  brigadista: 'bg-yellow-900/30 text-yellow-400',
-  proveedor: 'bg-blue-900/30 text-blue-400'
+  empleado: 'bg-primario/15 text-primario border border-primario/20',
+  brigadista: 'bg-amber-500/15 text-amber-400 border border-amber-500/20',
+  proveedor: 'bg-blue-500/15 text-blue-400 border border-blue-500/20'
 };
 
 export default function ListaEnPlanta({ empleados }) {
   return (
-    <div className="bg-paneles rounded-lg border border-primario/20 p-4">
-      <h3 className="text-white font-semibold mb-3">
-        Personal en planta ({empleados.length})
-      </h3>
-      <div className="space-y-2 max-h-96 overflow-y-auto">
+    <div className="bg-paneles rounded-2xl border border-bordes">
+      <div className="px-5 py-4 border-b border-bordes flex items-center justify-between">
+        <h3 className="text-white font-semibold text-sm">Personal en planta</h3>
+        <span className="text-primario text-xs font-semibold bg-primario/10 px-2 py-0.5 rounded-full">{empleados.length}</span>
+      </div>
+      <div className="divide-y divide-bordes/50 max-h-[420px] overflow-y-auto">
         {empleados.length === 0 ? (
-          <p className="text-gray-500 text-sm">Nadie en planta</p>
+          <p className="text-texto-muted text-sm p-5">Nadie en planta</p>
         ) : (
           empleados.map((emp) => (
-            <div
-              key={emp.id}
-              className="flex items-center justify-between py-2 border-b border-gray-700/50 last:border-0"
-            >
+            <div key={emp.id} className="flex items-center justify-between px-5 py-3 hover:bg-white/[0.02] transition-colors">
               <div>
-                <p className="text-white text-sm">{emp.nombre}</p>
-                <p className="text-gray-500 text-xs">{emp.departamento}</p>
+                <p className="text-white text-sm font-medium">{emp.nombre}</p>
+                <p className="text-texto-muted text-xs">{emp.departamento}</p>
               </div>
-              <span
-                className={`text-xs px-2 py-1 rounded-full ${tipoColors[emp.tipo] || 'bg-gray-700 text-gray-300'}`}
-              >
+              <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${tipoColors[emp.tipo] || 'bg-gray-700 text-gray-300'}`}>
                 {emp.tipo}
               </span>
             </div>
