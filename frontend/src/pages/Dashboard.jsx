@@ -57,8 +57,8 @@ export default function Dashboard() {
     <div className="space-y-8">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-white tracking-tight">Dashboard</h1>
-          <p className="text-texto-muted text-[13px] mt-0.5">Monitoreo en tiempo real</p>
+          <h1 className="text-xl font-semibold text-white tracking-tight">Panel de Control</h1>
+          <p className="text-texto-muted text-[13px] mt-0.5">Monitoreo en tiempo real de la planta</p>
         </div>
         <button onClick={() => navigate('/evacuacion')}
           className="emergency-pulse bg-gradient-to-r from-danger to-red-600 hover:from-danger-hover hover:to-red-700 text-white font-bold py-2.5 px-7 rounded-xl transition-all duration-300 flex items-center gap-2 text-[13px] shadow-lg shadow-danger/25 active:scale-[0.97]">

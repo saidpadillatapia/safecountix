@@ -28,8 +28,14 @@ function Layout({ children }) {
               <span className="text-white font-semibold text-sm tracking-tight">SafeCountix</span>
             </NavLink>
             <div className="flex items-center gap-0.5">
-              <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
-              <NavLink to="/evacuacion" className={linkClass}>Evacuación</NavLink>
+              <NavLink to="/dashboard" className={linkClass}>Inicio</NavLink>
+              <NavLink to="/evacuacion" className={({ isActive }) =>
+                `px-3 py-1.5 rounded-xl text-[13px] font-bold transition-all duration-300 ${
+                  isActive
+                    ? 'bg-danger/20 text-danger shadow-sm'
+                    : 'text-danger/80 hover:text-danger hover:bg-danger/10'
+                }`
+              }>🚨 Evacuación</NavLink>
               <NavLink to="/empleados" className={linkClass}>Empleados</NavLink>
               <NavLink to="/visitantes" className={linkClass}>Visitantes</NavLink>
               <NavLink to="/alertas" className={linkClass}>Alertas</NavLink>
