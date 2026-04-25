@@ -65,11 +65,17 @@ const registroRoutes = require('./routes/registros');
 const dashboardRoutes = require('./routes/dashboard');
 const empleadosRoutes = require('./routes/empleados');
 const evacuacionRoutes = require('./routes/evacuacion');
+const alertasRoutes = require('./routes/alertas');
+const incidenciasRoutes = require('./routes/incidencias');
+const visitantesRoutes = require('./routes/visitantes');
 app.use('/api/auth', authRoutes);
 app.use('/api/registro', registroRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/empleados', empleadosRoutes);
 app.use('/api/evacuacion', evacuacionRoutes);
+app.use('/api/alertas', alertasRoutes);
+app.use('/api/incidencias', incidenciasRoutes);
+app.use('/api/visitantes', visitantesRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

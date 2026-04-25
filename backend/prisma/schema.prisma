@@ -19,6 +19,9 @@ model Empresa {
   usuarios   Usuario[]
   empleados  Empleado[]
   evacuaciones HistorialEvacuacion[]
+  alertas      Alerta[]
+  incidencias  Incidencia[]
+  visitantes   Visitante[]
 }
 
 model Usuario {
@@ -65,4 +68,41 @@ model HistorialEvacuacion {
   totalEvacuados  Int      // personas marcadas como evacuadas
   brigadistas     Int      // brigadistas en planta durante la evacuación
   empresa         Empresa  @relation(fields: [empresaId], references: [id])
+}
+
+model Alerta {
+  id          Int      @id @default(autoincrement())
+  empresaId   Int
+  tipo        String   // "evacuacion_pendiente" | "sobre_cupo" | "visitante_sin_salida" | "incidencia"
+  mensaje     String
+  nivel       String   @default("warning") // "info" | "warning" | "critical"
+  leida       Boolean  @default(false)
+  fechaCreada DateTime @default(now())
+  empresa     Empresa  @relation(fields: [empresaId], references: [id])
+}
+
+model Incidencia {
+  id          Int      @id @default(autoincrement())
+  empresaId   Int
+  titulo      String
+  descripcion String   @db.Text
+  area        String
+  nivel       String   // "baja" | "media" | "alta" | "critica"
+  estado      String   @default("abierta") // "abierta" | "en_proceso" | "resuelta"
+  fechaCreada DateTime @default(now())
+  fechaResuelta DateTime?
+  empresa     Empresa  @relation(fields: [empresaId], references: [id])
+}
+
+model Visitante {
+  id          Int      @id @default(autoincrement())
+  empresaId   Int
+  nombre      String
+  empresaOrigen String
+  motivo      String
+  acceso      String   // puerta de acceso
+  fechaEntrada DateTime @default(now())
+  fechaSalida  DateTime?
+  estado      String   @default("dentro") // "dentro" | "fuera"
+  empresa     Empresa  @relation(fields: [empresaId], references: [id])
 }

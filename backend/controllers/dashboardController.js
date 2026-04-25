@@ -99,4 +99,40 @@ async function getMovimientos(req, res) {
   }
 }
 
-module.exports = { getConteo, getEnPlanta, getMovimientos };
+/**
+ * GET /api/dashboard/movimientos-por-hora
+ * Return entry/exit counts grouped by hour for today.
+ */
+async function getMovimientosPorHora(req, res) {
+  try {
+    const empresaId = req.user.empresaId;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const registros = await prisma.registro.findMany({
+      where: {
+        empleado: { empresaId },
+        fechaHora: { gte: today }
+      },
+      select: { tipo: true, fechaHora: true }
+    });
+
+    // Group by hour
+    const porHora = {};
+    for (let h = 0; h < 24; h++) {
+      porHora[h] = { hora: `${String(h).padStart(2, '0')}:00`, entradas: 0, salidas: 0 };
+    }
+    registros.forEach(r => {
+      const h = new Date(r.fechaHora).getHours();
+      if (r.tipo === 'entrada') porHora[h].entradas++;
+      else porHora[h].salidas++;
+    });
+
+    return res.json(Object.values(porHora));
+  } catch (error) {
+    console.error('Error en getMovimientosPorHora:', error);
+    return res.status(500).json({ error: true, message: 'Error interno del servidor', code: 'INTERNAL_ERROR' });
+  }
+}
+
+module.exports = { getConteo, getEnPlanta, getMovimientos, getMovimientosPorHora };

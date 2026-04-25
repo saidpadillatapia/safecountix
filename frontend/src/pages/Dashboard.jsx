@@ -4,6 +4,8 @@ import Contador from '../components/Contador.jsx';
 import MovimientosRecientes from '../components/MovimientosRecientes.jsx';
 import ListaEnPlanta from '../components/ListaEnPlanta.jsx';
 import HistorialEvacuaciones from '../components/HistorialEvacuaciones.jsx';
+import PersonalPorArea from '../components/PersonalPorArea.jsx';
+import EntradasSalidasHora from '../components/EntradasSalidasHora.jsx';
 import { onConteoActualizado } from '../services/socket.js';
 import { apiUrl, getAuthHeaders } from '../services/api.js';
 
@@ -113,6 +115,11 @@ export default function Dashboard() {
         <div>
           <ListaEnPlanta empleados={enPlanta} />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PersonalPorArea empleados={enPlanta} />
+        <EntradasSalidasHora />
       </div>
 
       <HistorialEvacuaciones />
