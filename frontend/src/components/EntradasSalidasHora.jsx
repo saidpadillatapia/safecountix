@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { apiUrl, getAuthHeaders } from '../services/api.js';
 
@@ -7,37 +8,35 @@ export default function EntradasSalidasHora() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    async function f() {
       try {
         const res = await fetch(apiUrl('/api/dashboard/movimientos-por-hora'), { headers: getAuthHeaders() });
-        if (res.ok) {
-          const json = await res.json();
-          setData(json.filter(h => { const hour = parseInt(h.hora); return hour >= 6 && hour <= 22; }));
-        }
-      } catch (error) { console.error('Error loading hourly data:', error); }
+        if (res.ok) { const j = await res.json(); setData(j.filter(h => parseInt(h.hora) >= 6 && parseInt(h.hora) <= 22)); }
+      } catch (e) { console.error(e); }
       finally { setLoading(false); }
     }
-    fetchData();
+    f();
   }, []);
 
   if (loading) return null;
 
   return (
-    <div className="bg-paneles rounded-2xl border border-bordes p-5">
-      <h3 className="text-white font-semibold text-sm mb-4">Entradas / Salidas Hoy</h3>
-      <div className="h-52">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+      className="glass rounded-2xl p-5">
+      <h3 className="text-white font-semibold text-[13px] mb-4">Entradas / Salidas Hoy</h3>
+      <div className="h-44">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barGap={2}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1E2D27" vertical={false} />
-            <XAxis dataKey="hora" stroke="#6B7280" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#6B7280" fontSize={10} tickLine={false} axisLine={false} />
-            <Tooltip contentStyle={{ backgroundColor: '#111916', border: '1px solid #1E2D27', borderRadius: '12px', fontSize: '12px' }} />
-            <Legend wrapperStyle={{ fontSize: '11px' }} />
-            <Bar dataKey="entradas" name="Entradas" fill="#34d399" radius={[3, 3, 0, 0]} />
-            <Bar dataKey="salidas" name="Salidas" fill="#f87171" radius={[3, 3, 0, 0]} />
+          <BarChart data={data} barGap={1} barSize={8}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" vertical={false} />
+            <XAxis dataKey="hora" stroke="#71717A" fontSize={9} tickLine={false} axisLine={false} />
+            <YAxis stroke="#71717A" fontSize={9} tickLine={false} axisLine={false} width={25} />
+            <Tooltip contentStyle={{ backgroundColor: 'rgba(24,24,27,0.9)', backdropFilter: 'blur(10px)', border: '1px solid #27272A', borderRadius: '12px', fontSize: '11px', color: '#fff' }} />
+            <Legend wrapperStyle={{ fontSize: '10px' }} />
+            <Bar dataKey="entradas" name="Entradas" fill="#22C55E" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="salidas" name="Salidas" fill="#EF4444" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </motion.div>
   );
 }

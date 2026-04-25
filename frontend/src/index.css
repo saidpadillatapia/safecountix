@@ -1,37 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --color-primario: #1D9E75;
-  --color-primario-hover: #178A65;
-  --color-fondo: #0A0F0D;
-  --color-paneles: #111916;
-  --color-cards: #151D19;
-  --color-bordes: #1E2D27;
-  --color-texto: #D1D5DB;
-  --color-texto-muted: #6B7280;
-  --color-danger: #DC2626;
-  --color-danger-bg: #1C0A0A;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --color-primario-hover: #17875F;
+  --color-primario-light: #1D9E7520;
+  --color-fondo: #09090B;
+  --color-paneles: #18181B;
+  --color-cards: #1C1C1F;
+  --color-bordes: #27272A;
+  --color-bordes-light: #3F3F46;
+  --color-texto: #FAFAFA;
+  --color-texto-secondary: #A1A1AA;
+  --color-texto-muted: #71717A;
+  --color-danger: #EF4444;
+  --color-danger-hover: #DC2626;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
 }
+
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #0A0F0D;
-  color: #D1D5DB;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  background-color: #09090B;
+  color: #FAFAFA;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0A0F0D; }
-::-webkit-scrollbar-thumb { background: #1E2D27; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #2A3D35; }
+/* Apple-style scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #52525B; }
 
-/* Pulse animation for emergency button */
-@keyframes emergency-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-  50% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); }
+/* Glass effect */
+.glass {
+  background: rgba(24, 24, 27, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(39, 39, 42, 0.8);
 }
-.emergency-pulse { animation: emergency-pulse 2s ease-in-out infinite; }
+
+/* Subtle glow */
+.glow-green { box-shadow: 0 0 40px -10px rgba(29, 158, 117, 0.3); }
+.glow-red { box-shadow: 0 0 40px -10px rgba(239, 68, 68, 0.3); }
+
+/* Emergency pulse */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.emergency-pulse { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+/* Dot pulse */
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.dot-pulse { animation: dot-pulse 1.5s ease-in-out infinite; }
+
+/* Shimmer loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Number counter animation */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.count-animate { animation: count-up 0.5s ease-out; }
