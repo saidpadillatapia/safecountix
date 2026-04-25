@@ -22,9 +22,6 @@ const app = express();
 // Trust proxy — required for Railway/Vercel reverse proxy
 app.set('trust proxy', 1);
 
-// Trust proxy — required for Railway/Vercel (behind reverse proxy)
-app.set('trust proxy', 1);
-
 // Security headers
 app.use(helmet());
 
@@ -120,9 +117,7 @@ const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
   console.log(`SafeCountix backend running on port ${PORT}`);
-  console.log(`DATABASE_URL: ${process.env.DATABASE_URL ? 'SET (' + process.env.DATABASE_URL.substring(0, 20) + '...)' : 'NOT SET'}`);
-  console.log(`JWT_SECRET: ${process.env.JWT_SECRET ? 'SET' : 'NOT SET'}`);
-  console.log(`CLIENT_URL: ${process.env.CLIENT_URL || 'NOT SET'}`);
+  console.log(`Environment: DATABASE_URL=${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}, JWT_SECRET=${process.env.JWT_SECRET ? 'SET' : 'NOT SET'}, CLIENT_URL=${process.env.CLIENT_URL ? 'SET' : 'NOT SET'}`);
 });
 
 module.exports = { app, server };

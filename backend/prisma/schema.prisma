@@ -47,6 +47,9 @@ model Empleado {
   activo              Boolean    @default(true)
   empresa             Empresa    @relation(fields: [empresaId], references: [id])
   registros           Registro[]
+
+  @@index([empresaId, estadoActual, activo])
+  @@index([empresaId, activo])
 }
 
 model Registro {
@@ -56,6 +59,9 @@ model Registro {
   puerta     String   // "peatonal" | "vehicular"
   fechaHora  DateTime @default(now())
   empleado   Empleado @relation(fields: [empleadoId], references: [id])
+
+  @@index([empleadoId])
+  @@index([fechaHora])
 }
 
 model HistorialEvacuacion {

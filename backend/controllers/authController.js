@@ -2,7 +2,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../db');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'safecountix_secret_2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET environment variable is not set');
+  process.exit(1);
+}
 const JWT_EXPIRES_IN = '24h';
 
 /**
